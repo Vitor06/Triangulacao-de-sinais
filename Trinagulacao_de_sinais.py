@@ -12,7 +12,7 @@ pk_caso2 = {'1':-46.9,'2':-46.4,'3':-41.2,'4':-45.8,'5':-48.7}
 def desenharCirculos(d0):
 
     plt.axis([-30, 30, -30, 30])
-    plt.plot(0, 9, marker="o", markersize=5, markeredgecolor="red", markerfacecolor="red")
+    plt.plot(0, 9, marker="o", markersize=5, markeredgecolor="red", markerfacecolor="red")#Posicao real
     for i in range(1,len(posicao_k)+1):
         x = posicao_k[str(i)][0]
         y = posicao_k[str(i)][1]
