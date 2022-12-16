@@ -21,8 +21,6 @@ def desenharCirculos(d0):
 
     plt.show()
 
-
-
 def distancia_radial(k,p):
     k = str(k)
     Dk =pow(10, ((p_0[k]-p[k]) / (10*Ft[k]))  )
