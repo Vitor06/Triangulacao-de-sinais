@@ -1,12 +1,25 @@
 
 import math
 import numpy as np
+import matplotlib.pyplot as plt
 
 p_0 = {'1':-26,'2':-33.8,'3':-29.8,'4':-31.2,'5':-33.0}
 Ft = {'1':2.1,'2':1.8,'3':1.3,'4':1.4,'5':1.5}
 posicao_k = {'1':(1.55,17.63,1.35),'2':(-4.02,0,1.35),'3':(-4.40,9.60,1.35),'4':(9.27,4.64,1.35),'5':(9.15,12,1.35)}
 pk_caso1 = {'1':-48.4,'2':-50.6,'3':-32.2,'4':-47.4,'5':-46.3}
 pk_caso2 = {'1':-46.9,'2':-46.4,'3':-41.2,'4':-45.8,'5':-48.7}
+
+def desenharCirculos(d0):
+
+    plt.axis([-30, 30, -30, 30])
+    plt.plot(0, 9, marker="o", markersize=5, markeredgecolor="red", markerfacecolor="red")
+    for i in range(1,len(posicao_k)+1):
+        x = posicao_k[str(i)][0]
+        y = posicao_k[str(i)][1]
+        c=plt.Circle((x, y), d0[str(i)],fill= False)
+        plt.gca().add_artist(c)
+
+    plt.show()
 
 
 
@@ -51,4 +64,5 @@ MaT_X_Ma = np.matmul( MaT,Ma)
 MaT_X_Ma_inv =  np.linalg.inv(MaT_X_Ma)
 Mx =  np.matmul( np.matmul(MaT_X_Ma_inv,MaT) ,Mb)
 
-print(Mx)
+# print(Mx)
+desenharCirculos(D0)
