@@ -15,7 +15,7 @@ plt.axis([-30, 30, -30, 30])
 n = 5 #equação que será eleiminada  -> k - n
 def desenhar_ponto(ponto,color):
     plt.plot(ponto[0], ponto[1], marker="o", markersize=5, markeredgecolor=color, markerfacecolor=color)#Posicao real
-def desenharCirculos(d0):
+def desenhar_circulos(d0):
 
     for i in range(1,len(posicao_k)+1):
         x = posicao_k[str(i)][0]
@@ -83,7 +83,7 @@ def main():
     MaT_X_Ma_inv =  np.linalg.inv(MaT_X_Ma)
     Mx =  np.matmul( np.matmul(MaT_X_Ma_inv,MaT) ,Mb)
     print(Mx)
-    desenharCirculos(D0)
+    desenhar_circulos(D0)
     desenhar_ponto(ponto_real_caso1,"red")#Real
     desenhar_ponto((Mx[0],Mx[1]),"green")#Estimado
     plt.show()
