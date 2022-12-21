@@ -12,7 +12,14 @@ ponto_real_caso1 = (0,9)
 ponto_real_caso2 = (3,3)
 plt.axis([-30, 30, -30, 30])
 
-n = 5 #equação que será eleiminada  -> k - n
+n = 5 #equação que será eleiminada  -> k - n(linearização)
+def distancia_entre_pontos(ponto_estimado,ponto_real):
+    return math.sqrt(pow(ponto_real[0]-ponto_estimado[0],2) + pow(ponto_real[1]-ponto_estimado[1],2) )
+
+def calcular_acuracia(caso,ponto_estimado):
+    if(caso ==1):return distancia_entre_pontos(ponto_estimado,ponto_real_caso1)
+    elif(caso==2):return distancia_entre_pontos(ponto_estimado,ponto_real_caso2)
+
 def desenhar_ponto(ponto,color):
     plt.plot(ponto[0], ponto[1], marker="o", markersize=5, markeredgecolor=color, markerfacecolor=color)#Posicao real
 def desenhar_circulos(d0):
@@ -25,37 +32,37 @@ def desenhar_circulos(d0):
 
 def distancia_radial(k,p):
     k = str(k)
-    Dk =pow(10, ((p_0[k]-p[k]) / (10*Ft[k]))  )
-    return Dk
+    dk =pow(10, ((p_0[k]-p[k]) / (10*Ft[k]))  )
+    return dk
 
-def matrizA():
-    M = len(posicao_k)-1
-    N = 2
+def matriz_A():
+    M ,N,k= len(posicao_k)-1,2,1
     Ma = np.empty([M,N])
-    k = 1;
-    #2*(Xn-Xk)
+
     for i in range(len(Ma)):
         if(k==n):k+=1
         if(k<=len(posicao_k)):
             # print('2*' + '(' + 'X'+str(n)+'-' + 'X'+str(k) + ')' )#Somente para vizualizacao
+            #2*(Xn-Xk)
             Ma[i][0] = 2*(posicao_k[str(n)][0] - posicao_k[str(k)][0])
-            k+=1
-    k = 1
 
-    #2*(Yn-Yk)
-    for i in range(len(Ma)):
-        if(k==n):k+=1
-        if(k<=len(posicao_k)):
             #print( '2*' + '(' + 'Y'+str(n)+'-' + 'Y'+str(k) + ')' )#Somente para vizualizacao
+            #2*(Yn-Yk)
             Ma[i][1] = 2*(posicao_k[str(n)][1] - posicao_k[str(k)][1])
             k+=1
+
+    #2*(Yn-Yk)
+    # for i in range(len(Ma)):
+    #     if(k==n):k+=1
+    #     if(k<=len(posicao_k)):
+    #         #print( '2*' + '(' + 'Y'+str(n)+'-' + 'Y'+str(k) + ')' )#Somente para vizualizacao
+    #         Ma[i][1] = 2*(posicao_k[str(n)][1] - posicao_k[str(k)][1])
+    #         k+=1
     return Ma
 
-def matrizB(d0):
-    M = len(posicao_k)-1
-    N = 1
+def matriz_B(d0):
+    M,N,k = len(posicao_k)-1,1,1
     Mb = np.empty([M,N])
-    k = 1;
 
     for i in range(len(Mb)):
         #Wk - Wn
@@ -70,22 +77,28 @@ def matrizB(d0):
 
     return Mb
 
-def d0(pk_caso):
+def dk(pk_caso):
     distancia = dict({str(k):distancia_radial(k,pk_caso) for k  in range(1,6)})
     return distancia
-
-def main():
-    D0 = d0(pk_caso1)
-    Ma = matrizA()
-    Mb = matrizB  (D0)
+def calcular_x_y_estimado(Ma,Mb):
     MaT = Ma.transpose()
     MaT_X_Ma = np.matmul( MaT,Ma)
     MaT_X_Ma_inv =  np.linalg.inv(MaT_X_Ma)
     Mx =  np.matmul( np.matmul(MaT_X_Ma_inv,MaT) ,Mb)
+    return Mx
+
+def main():
+    Dk = dk(pk_caso1)
+    Ma = matriz_A()
+    Mb = matriz_B  (Dk)
+    Mx =  calcular_x_y_estimado(Ma,Mb)
     print(Mx)
-    desenhar_circulos(D0)
+    x_estimado = Mx[0]
+    y_estimado = Mx[1]
+    print("Acurácia :" + str(calcular_acuracia(1,(x_estimado,y_estimado))))
+    desenhar_circulos(Dk)
     desenhar_ponto(ponto_real_caso1,"red")#Real
-    desenhar_ponto((Mx[0],Mx[1]),"green")#Estimado
+    desenhar_ponto((x_estimado,y_estimado),"green")#Estimado
     plt.show()
 
 
