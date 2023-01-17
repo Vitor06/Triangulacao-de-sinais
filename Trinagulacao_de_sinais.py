@@ -20,8 +20,9 @@ def calcular_acuracia(caso,ponto_estimado):
     if(caso ==1):return distancia_entre_pontos(ponto_estimado,ponto_real_caso1)
     elif(caso==2):return distancia_entre_pontos(ponto_estimado,ponto_real_caso2)
 
-def desenhar_ponto(ponto,color):
-    plt.plot(ponto[0], ponto[1], marker="o", markersize=5, markeredgecolor=color, markerfacecolor=color)#Posicao real
+def desenhar_ponto(ponto,color,text):
+    plt.plot(ponto[0], ponto[1], marker="o", markersize=5, markeredgecolor=color, markerfacecolor=color,label=text)#Posicao real
+    plt.legend()
 def desenhar_circulos(d0):
 
     for i in range(1,len(posicao_k)+1):
@@ -89,6 +90,7 @@ def calcular_x_y_estimado(Ma,Mb):
 
 def main():
     Dk = dk(pk_caso1)
+    print(Dk)
     Ma = matriz_A()
     Mb = matriz_B  (Dk)
     Mx =  calcular_x_y_estimado(Ma,Mb)
@@ -97,8 +99,8 @@ def main():
     y_estimado = Mx[1]
     print("Acurácia :" + str(calcular_acuracia(1,(x_estimado,y_estimado))))
     desenhar_circulos(Dk)
-    desenhar_ponto(ponto_real_caso1,"red")#Real
-    desenhar_ponto((x_estimado,y_estimado),"green")#Estimado
+    desenhar_ponto(ponto_real_caso1,"red","Ponto real")#Real
+    desenhar_ponto((x_estimado,y_estimado),"green","Ponto estimado")#Estimado
     plt.show()
 
 
