@@ -2,7 +2,6 @@
 import math
 import numpy as np
 import matplotlib.pyplot as plt
-
 p_0 = {'1':-26,'2':-33.8,'3':-29.8,'4':-31.2,'5':-33.0}
 Ft = {'1':2.1,'2':1.8,'3':1.3,'4':1.4,'5':1.5}
 posicao_k = {'1':(1.55,17.63,1.35),'2':(-4.02,0,1.35),'3':(-4.40,9.60,1.35),'4':(9.27,4.64,1.35),'5':(9.15,12,1.35)}
@@ -10,7 +9,6 @@ pk_caso1 = {'1':-48.4,'2':-50.6,'3':-32.2,'4':-47.4,'5':-46.3}
 pk_caso2 = {'1':-46.9,'2':-46.4,'3':-41.2,'4':-45.8,'5':-48.7}
 ponto_real_caso1 = (0,9)
 ponto_real_caso2 = (3,3)
-plt.axis([-30, 30, -30, 30])
 
 n = 5 #equação que será eleiminada  -> k - n(linearização)
 def distancia_entre_pontos(ponto_estimado,ponto_real):
@@ -52,13 +50,6 @@ def matriz_A():
             Ma[i][1] = 2*(posicao_k[str(n)][1] - posicao_k[str(k)][1])
             k+=1
 
-    #2*(Yn-Yk)
-    # for i in range(len(Ma)):
-    #     if(k==n):k+=1
-    #     if(k<=len(posicao_k)):
-    #         #print( '2*' + '(' + 'Y'+str(n)+'-' + 'Y'+str(k) + ')' )#Somente para vizualizacao
-    #         Ma[i][1] = 2*(posicao_k[str(n)][1] - posicao_k[str(k)][1])
-    #         k+=1
     return Ma
 
 def matriz_B(d0):
@@ -87,21 +78,40 @@ def calcular_x_y_estimado(Ma,Mb):
     MaT_X_Ma_inv =  np.linalg.inv(MaT_X_Ma)
     Mx =  np.matmul( np.matmul(MaT_X_Ma_inv,MaT) ,Mb)
     return Mx
-
+def menu():
+    print("Digite 1 - Caso 1 ")
+    print("Digite 2 - Caso 2 ")
+    print("Digite 3 - Sair ")
+    print("-----------------")
+def escolher_caso(entrada):
+    if entrada==1:
+         return (pk_caso1,1,ponto_real_caso1)
+    elif entrada==2:
+        return (pk_caso2 ,2,ponto_real_caso2)
+    else :
+        print("Finalizado")
 def main():
-    Dk = dk(pk_caso1)
-    print(Dk)
-    Ma = matriz_A()
-    Mb = matriz_B  (Dk)
-    Mx =  calcular_x_y_estimado(Ma,Mb)
-    print(Mx)
-    x_estimado = Mx[0]
-    y_estimado = Mx[1]
-    print("Acurácia :" + str(calcular_acuracia(1,(x_estimado,y_estimado))))
-    desenhar_circulos(Dk)
-    desenhar_ponto(ponto_real_caso1,"red","Ponto real")#Real
-    desenhar_ponto((x_estimado,y_estimado),"green","Ponto estimado")#Estimado
-    plt.show()
-
+    menu()
+    entrada = int(input())
+    caso = escolher_caso(entrada)
+    while entrada !=3 :
+        plt.axis([-30, 30, -30, 30])
+        Dk = dk(caso[0])
+        Ma = matriz_A()
+        Mb = matriz_B  (Dk)
+        Mx =  calcular_x_y_estimado(Ma,Mb)
+        x_estimado = Mx[0]
+        y_estimado = Mx[1]
+        print ("Ponto Estimado:")
+        print("(x,y)" + "=" + "(" + str(x_estimado[0])+","+ str(y_estimado[0]) + ")")
+        print("Acurácia :" + str(calcular_acuracia(caso[1],(x_estimado,y_estimado))))
+        desenhar_circulos(Dk)
+        desenhar_ponto(caso[2],"red","Ponto real")#Real
+        desenhar_ponto((x_estimado,y_estimado),"green","Ponto estimado")#Estimado
+        plt.show()
+        print()
+        menu()
+        entrada = int(input())
+        caso = escolher_caso(entrada)
 
 main()
