@@ -9,7 +9,6 @@ pk_caso1 = {'1':-48.4,'2':-50.6,'3':-32.2,'4':-47.4,'5':-46.3}
 pk_caso2 = {'1':-46.9,'2':-46.4,'3':-41.2,'4':-45.8,'5':-48.7}
 ponto_real_caso1 = (0,9)
 ponto_real_caso2 = (3,3)
-
 n = 5 #equação que será eleiminada  -> k - n(linearização)
 def distancia_entre_pontos(ponto_estimado,ponto_real):
     return math.sqrt(pow(ponto_real[0]-ponto_estimado[0],2) + pow(ponto_real[1]-ponto_estimado[1],2) )
@@ -23,10 +22,12 @@ def desenhar_ponto(ponto,color,text):
     plt.legend()
 def desenhar_circulos(d0):
 
+
     for i in range(1,len(posicao_k)+1):
         x = posicao_k[str(i)][0]
         y = posicao_k[str(i)][1]
-        c=plt.Circle((x, y), d0[str(i)],fill= False)
+        c=plt.Circle((x, y), d0[str(i)],fill= False,edgecolor=None)
+        desenhar_ponto((x,y),"black",None)
         plt.gca().add_artist(c)
 
 def distancia_radial(k,p):
@@ -95,7 +96,9 @@ def main():
     entrada = int(input())
     caso = escolher_caso(entrada)
     while entrada !=3 :
-        plt.axis([-30, 30, -30, 30])
+        plt.axis("equal")
+        plt.axis([-30, 50, -30, 50])
+
         Dk = dk(caso[0])
         Ma = matriz_A()
         Mb = matriz_B  (Dk)
